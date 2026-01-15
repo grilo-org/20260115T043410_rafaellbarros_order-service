@@ -1,0 +1,68 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:order_local}
+    username: ${DB_USER:order}
+    password: ${DB_PASSWORD:order123}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+      connection-test-query: SELECT 1
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+server:
+  port: ${APP_PORT:8082}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+  show-actuator: true
+
+
+management:
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    tags:
+      application: ${APP_NAME}
+      namespace: ${APP_NAMESPACE}
+      instance: ${APP_HOST}
+  server:
+    port: ${APP_PORT:8082}
+
+logging:
+  level:
+    org.springframework: INFO
+    org.springdoc: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.boot.actuate.endpoint: INFO
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: DEBUG
+    org.springframework.web.servlet: TRACE
